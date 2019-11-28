@@ -7,10 +7,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - TextOnCircleWithDragging",
+            "request": "launch",
+            "mainClass": "run.TextOnCircleWithDragging",
+            "projectName": "Chess"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Main",
             "request": "launch",
             "vmArgs": "--module-path javafx-sdk-11.0.2\\lib --add-modules javafx.controls",
-            "mainClass": "Main",
+            "mainClass": "run.Main",
             "projectName": "Chess"
         }
     ]
