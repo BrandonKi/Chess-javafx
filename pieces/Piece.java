@@ -1,5 +1,9 @@
 package pieces;
 
+import java.util.ArrayList;
+
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -9,24 +13,27 @@ import run.Main;
 public abstract class Piece extends StackPane{
 
     private boolean color; // true = black, false = white
+    private static final short MOUSE_IMG_DRAG_OFFSET = 30;
+    public static final short IMG_X_OFFSET = 15;
+    public static final short IMG_Y_OFFSET = 5;
     private Point pos;
-    public int x, y;
+    public Point start, end;
 
     public Piece(int x, int y, boolean color){
-        pos = new Point(x* 82, y * 82);
-        x = pos.getX();
-        y = pos.getY();
+        pos = new Point(x, y);
+
         this.color = color;
-        getChildren().add(new ImageView(new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png")));
-        //setPrefSize(Main.TILE_SIZE, Main.TILE_SIZE);
-        // this.setOnMouseDragged(e -> {
-        //     relocate(e.getSceneX(), e.getSceneY());
-        //     System.out.println(e.getSceneX() + " " + e.getSceneY());
-        // });
+        //System.out.println(getClass().getName());
+        if(!isPlaceHolder()){
+            getChildren().add(new ImageView(new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png")));
+            makeDraggable(this);
+        }
     }
    
     public Image getImage(){
-        return new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png");
+        if(!isPlaceHolder())
+            return new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png");
+        return null;
     }
 
     public String toString(){
@@ -45,14 +52,71 @@ public abstract class Piece extends StackPane{
         pos = new Point(pos.getX(), y);
     }
 
-    public void moveTo(int x, int y){
-        pos = new Point(x, y);
+    public boolean getColor(){
+        return color;
     }
 
-    // this.setOnMousePressed(e -> {
-    //     mouseX = e.getSceneX();
-    //     mouseY = e.getSceneY();
-    // });
+    public void move(Point start, Point end){
+        convertToBoardCoords(start);
+        convertToBoardCoords(end);
+        System.out.println(start.getX() + " " + start.getY());
+        System.out.println(end.getX() + " " + end.getY());
+        if(isValid(start, end)){ 
+            Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
+            Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
+            Main.getBoard()[end.getX()][end.getY()] = this;
+            this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+        }
+        else
+            this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
+        Main.printBoard();
+    }
 
-    
+    public void convertToBoardCoords(Point p){
+        p.setX(p.getX()/Main.TILE_SIZE);
+        p.setY(p.getY()/Main.TILE_SIZE);
+    }
+
+    public Point toLocation(Point p){
+        return new Point(p.getY(), p.getX()); //flip X and Y
+    }
+
+    protected boolean isValid(Point start, Point end){
+        System.out.println(Main.getBoard()[end.getX()][end.getY()]);
+        if(Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPlaceHolder(){
+        return getClass().getName().substring(getClass().getName().indexOf('.')+1).indexOf("Holder") != -1;
+    }
+
+    private void makeDraggable(Piece p) {
+        Node node = (Node)p;
+        node.setOnMouseEntered(e -> {
+            node.getScene().setCursor(Cursor.HAND);
+        });
+
+        node.setOnMouseExited(e -> {
+            node.getScene().setCursor(Cursor.DEFAULT);
+        });
+
+        node.setOnMousePressed(e -> {
+            node.getScene().setCursor(Cursor.CLOSED_HAND);
+            start = new Point((int)e.getSceneX(), (int)e.getSceneY());
+        });
+
+        node.setOnMouseReleased(e -> {
+            node.getScene().setCursor(Cursor.HAND);
+            end = new Point((int)e.getSceneX(), (int)e.getSceneY());
+            p.move(start, end);
+        });
+
+        node.setOnMouseDragged(e -> {
+            node.setLayoutX(node.getLayoutX() + e.getX() - MOUSE_IMG_DRAG_OFFSET);
+            node.setLayoutY(node.getLayoutY() + e.getY() - MOUSE_IMG_DRAG_OFFSET);
+        });
+    }
 }

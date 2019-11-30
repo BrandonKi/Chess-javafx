@@ -17,7 +17,23 @@ public class Point{
         return y;
     }
 
+    public void setX(int x){
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public String toString(){
         return "(" + x + ", " + y + ")";
+    }
+
+    public boolean equals(Point p){
+        if(p == null)
+            return false;
+        if(p.getX() == x && p.getY() == y)
+            return true;
+        return false;
     }
 }
