@@ -12,7 +12,10 @@ public class King extends Piece{
     }
 
     protected boolean isValid(Point start, Point end){
-        return super.isValid(start, end);
+        if(super.isValid(start, end)){
+            if(end.getX() - start.getX() != 0)
+        }
+        return false;
     }
 
 }

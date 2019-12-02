@@ -5,13 +5,7 @@
     
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - TextOnCircleWithDragging",
-            "request": "launch",
-            "mainClass": "run.TextOnCircleWithDragging",
-            "projectName": "Chess"
-        },
+        
         {
             "type": "java",
             "name": "CodeLens (Launch) - Main",
