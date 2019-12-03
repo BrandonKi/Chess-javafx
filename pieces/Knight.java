@@ -15,7 +15,7 @@ public class Knight extends Piece{
         if(super.isValid(start, end)){
             if(
                 (Math.abs(end.getX() - start.getX()) == 2 && Math.abs(end.getY() - start.getY()) == 1) ||
-                (Math.abs(end.getX() - start.getX()) == 1 && Math.abs(end.getY() - start.getY()) == 2) )
+                (Math.abs(end.getX() - start.getX()) == 1 && Math.abs(end.getY() - start.getY()) == 2))
                     return true;
         }
         return false;

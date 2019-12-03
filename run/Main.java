@@ -11,13 +11,17 @@ import javafx.stage.Stage;
 import pieces.*;
 import point.Point;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 public class Main extends Application {
 
     public final static boolean WHITE = false;
     public final static boolean BLACK = true;
-    private static final int HEIGHT = 760;
-    private static final int WIDTH = 733;
-    public static final int TILE_SIZE = 720 / 8;
+    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
+    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
+    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;
     public static Pane pane;
@@ -25,7 +29,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-
         StackPane root = new StackPane();
         pane = new Pane();
         stage.setTitle("Chess");
@@ -114,9 +117,9 @@ public class Main extends Application {
     }
 
     public static void printBoard() {
-        for (short i = 0; i < 8; i++) {
-            for (short x = 0; x < 8; x++) {
-                System.out.print(currentBoard[i][x].isPlaceHolder() ? "Empty " : currentBoard[i][x].toString().substring(currentBoard[i][x].toString().indexOf(' ')+1) + " ");
+        for (short i = 0; i < 8; i++){
+            for (short x = 0; x < 8; x++){
+                System.out.print((currentBoard[x][i].isPlaceHolder() ? "Empty " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).equals("Pawn") ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 6 ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 5 ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + " " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  ") + " ");
             }
             System.out.println();
         }

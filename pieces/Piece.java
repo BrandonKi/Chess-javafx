@@ -14,8 +14,8 @@ public abstract class Piece extends StackPane{
 
     private boolean color; // true = black, false = white
     private static final short MOUSE_IMG_DRAG_OFFSET = 30;
-    public static final short IMG_X_OFFSET = 15;
-    public static final short IMG_Y_OFFSET = 5;
+    public static final short IMG_X_OFFSET = 10;
+    public static final short IMG_Y_OFFSET = 10;
     private Point pos;
     public Point start, end;
 
@@ -23,7 +23,6 @@ public abstract class Piece extends StackPane{
         pos = new Point(x, y);
 
         this.color = color;
-        //System.out.println(getClass().getName());
         if(!isPlaceHolder()){
             getChildren().add(new ImageView(new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png")));
             makeDraggable(this);
