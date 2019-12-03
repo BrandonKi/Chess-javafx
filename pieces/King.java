@@ -13,7 +13,11 @@ public class King extends Piece{
 
     protected boolean isValid(Point start, Point end){
         if(super.isValid(start, end)){
-            if(end.getX() - start.getX() != 0)
+            if(
+                (Math.abs(end.getX() - start.getX()) == 1 && Math.abs(end.getY() - start.getY()) == 1) ||
+                (Math.abs(end.getX() - start.getX()) == 1 && Math.abs(end.getY() - start.getY()) == 0) ||
+                (Math.abs(end.getX() - start.getX()) == 0 && Math.abs(end.getY() - start.getY()) == 1))
+                    return true;
         }
         return false;
     }

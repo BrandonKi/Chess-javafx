@@ -14,16 +14,19 @@ public class Pawn extends Piece {
 
     protected boolean isValid(Point start, Point end) {
         if (super.isValid(start, end)) {
-            if ((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder()
-                    && (Main.getBoard()[start.getX()][start.getY()].getColor() ? end.getY() - start.getY() == 1
-                            : start.getY() - end.getY() == 1)
-                    && start.getX() == end.getX())
-                    || (!Main.getBoard()[end.getX()][end.getY()].isPlaceHolder()
-                            && (start.getX() - end.getX() == 1 || start.getX() - end.getX() == -1)
-                            && (Main.getBoard()[start.getX()][start.getY()].getColor() ? end.getY() - start.getY() == 1
-                                    : start.getY() - end.getY() == 1))
-                    || (Main.getBoard()[start.getX()][start.getY()].getColor() ? start.getY() == 1 : start.getY() == 6)
-                            && end.getY() == (Main.getBoard()[start.getX()][start.getY()].getColor() ? 3 : 4)) {
+            if (
+                (Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() && 
+                (Main.getBoard()[start.getX()][start.getY()].getColor() ? 
+                    end.getY() - start.getY() == 1 : start.getY() - end.getY() == 1) && 
+                start.getX() == end.getX()) || 
+                    (!Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() && 
+                    (start.getX() - end.getX() == 1 || start.getX() - end.getX() == -1) && 
+                    (Main.getBoard()[start.getX()][start.getY()].getColor() ? 
+                        end.getY() - start.getY() == 1 : start.getY() - end.getY() == 1)) || 
+                        (Main.getBoard()[start.getX()][start.getY()].getColor() ? 
+                            start.getY() == 1 : start.getY() == 6) && 
+                        end.getY() == (Main.getBoard()[start.getX()][start.getY()].getColor() ? 3 : 4) && 
+                        start.getX() == end.getX()) {
                 return true;
             }
         }
