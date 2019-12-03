@@ -66,6 +66,7 @@ public abstract class Piece extends StackPane{
             Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
             Main.getBoard()[end.getX()][end.getY()] = this;
             this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+            Main.turn = !Main.turn;
         }
         else
             this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
@@ -83,7 +84,7 @@ public abstract class Piece extends StackPane{
 
     protected boolean isValid(Point start, Point end){
         System.out.println(Main.getBoard()[end.getX()][end.getY()]);
-        if(Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor()){
+        if((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
             return true;
         }
         return false;
@@ -104,19 +105,25 @@ public abstract class Piece extends StackPane{
         });
 
         node.setOnMousePressed(e -> {
-            node.getScene().setCursor(Cursor.CLOSED_HAND);
-            start = new Point((int)e.getSceneX(), (int)e.getSceneY());
+            if(color == Main.turn){
+                node.getScene().setCursor(Cursor.CLOSED_HAND);
+                start = new Point((int)e.getSceneX(), (int)e.getSceneY());
+            }
         });
 
         node.setOnMouseReleased(e -> {
-            node.getScene().setCursor(Cursor.HAND);
-            end = new Point((int)e.getSceneX(), (int)e.getSceneY());
-            p.move(start, end);
+            if(color == Main.turn){
+                node.getScene().setCursor(Cursor.HAND);
+                end = new Point((int)e.getSceneX(), (int)e.getSceneY());
+                p.move(start, end);
+            }
         });
 
         node.setOnMouseDragged(e -> {
-            node.setLayoutX(node.getLayoutX() + e.getX() - MOUSE_IMG_DRAG_OFFSET);
-            node.setLayoutY(node.getLayoutY() + e.getY() - MOUSE_IMG_DRAG_OFFSET);
+            if(color == Main.turn){
+                node.setLayoutX(node.getLayoutX() + e.getX() - MOUSE_IMG_DRAG_OFFSET);
+                node.setLayoutY(node.getLayoutY() + e.getY() - MOUSE_IMG_DRAG_OFFSET);
+            }
         });
     }
 }

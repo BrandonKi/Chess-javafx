@@ -21,6 +21,7 @@ public class Main extends Application {
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;
     public static Pane pane;
+    public static boolean turn = WHITE;
 
     @Override
     public void start(Stage stage) {
