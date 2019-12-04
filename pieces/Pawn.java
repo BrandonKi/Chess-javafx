@@ -26,7 +26,9 @@ public class Pawn extends Piece {
                         (Main.getBoard()[start.getX()][start.getY()].getColor() ? 
                             start.getY() == 1 : start.getY() == 6) && 
                         end.getY() == (Main.getBoard()[start.getX()][start.getY()].getColor() ? 3 : 4) && 
-                        start.getX() == end.getX()) {
+                        start.getX() == end.getX() &&
+                        Main.getBoard()[start.getX()][(Main.getBoard()[start.getX()][start.getY()].getColor() ? 2 : 5)].isPlaceHolder() &&
+                        Main.getBoard()[start.getX()][(Main.getBoard()[start.getX()][start.getY()].getColor() ? 3 : 4)].isPlaceHolder()) {
                 return true;
             }
         }
