@@ -36,7 +36,7 @@ public abstract class Piece extends StackPane{
     }
 
     public String toString(){
-        return (color ? "Black " : "White ") + getClass().getName().substring(getClass().getName().indexOf(".")+1);
+        return isPlaceHolder() ? "Empty" : (color ? "Black " : "White ") + getClass().getName().substring(getClass().getName().indexOf(".")+1);
     }
 
     public Point getGridPosition(){
@@ -96,7 +96,8 @@ public abstract class Piece extends StackPane{
     private void makeDraggable(Piece p) {
         Node node = (Node)p;
         node.setOnMouseEntered(e -> {
-            node.getScene().setCursor(Cursor.HAND);
+            if(color == Main.turn)
+                node.getScene().setCursor(Cursor.HAND);
         });
 
         node.setOnMouseExited(e -> {

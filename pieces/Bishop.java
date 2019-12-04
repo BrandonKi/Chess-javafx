@@ -12,35 +12,38 @@ public class Bishop extends Piece{
     }
 
     protected boolean isValid(Point start, Point end){
-        if(super.isValid(start, end)){
-            if(Math.abs(end.getY() - start.getY()) == Math.abs(end.getX() - start.getX())){
-                for(int i = 0; i < Math.abs(start.getY() - end.getY()) - 1; i++){
-                    System.out.println(start.getX() - i + " " + (start.getY() + i));
-                    System.out.println(Main.getBoard()[start.getX() - i][start.getY() + i]);
-                    if(start.getX() < end.getX() && start.getY() < end.getY())
-                        if(start.getX() + i < Main.getBoard().length && start.getY() + i < start.getX() && !Main.getBoard()[start.getX() + i][start.getY() + i].isPlaceHolder()){
-                            System.out.println(1);
-                            return false;
-                        }
-                    if(start.getX() > end.getX() && start.getY() < end.getY())
-                        if(start.getX() - i >= 0 && start.getY() + i < Main.getBoard().length)
-                            if(!Main.getBoard()[start.getX() - i][start.getY() + i].isPlaceHolder()){
-                                System.out.println(2);
-                                return false;
-                            }
-                    if(start.getX() < end.getX() && start.getY() > end.getY())
-                        if(start.getX() + i < Main.getBoard().length && start.getY() - i >= 0 && !Main.getBoard()[start.getX() + i][start.getY() - i].isPlaceHolder()){
-                            System.out.println(3);
-                            return false;
-                        }
-                    if(start.getX() > end.getX() && start.getY() > end.getY())
-                        if(start.getX() - i >= 0 && start.getY() - i >= 0 && !Main.getBoard()[start.getX() - i][start.getY() - i].isPlaceHolder()){
-                            System.out.println(4);
-                            return false;
-                        }
+        if(super.isValid(start, end) && Math.abs(end.getY() - start.getY()) == Math.abs(end.getX() - start.getX())){
+            short difX = (short)(end.getX() - start.getX());
+            short difY = (short)(end.getY() - start.getY());
+            if(difY > 0 && difX > 0){
+                for(short i = 1; i < difX; i++){
+                    System.out.println(Main.getBoard()[end.getX() - i][end.getY() - i] + " " + (end.getX() - i) + ", " + (end.getY() - i));
+                    if(!Main.getBoard()[end.getX() - i][end.getY() - i].isPlaceHolder())
+                        return false;
                 }
-                return true;
             }
+            else if(difY < 0 && difX > 0){
+                for(short i = 1; i < difX; i++){
+                    System.out.println(Main.getBoard()[end.getX() - i][end.getY() + i] + " " + (end.getX() - i) + ", " + (end.getY() + i));
+                    if(!Main.getBoard()[end.getX() - i][end.getY() + i].isPlaceHolder())
+                        return false;
+                }
+            }
+            else if(difY > 0 && difX < 0){
+                for(short i = 1; i < difY; i++){
+                    System.out.println(Main.getBoard()[end.getX() + i][end.getY() + i] + " " + (end.getX() + i) + ", " + (end.getY() + i));
+                    if(!Main.getBoard()[end.getX() + i][end.getY() - i].isPlaceHolder())
+                        return false;
+                }
+            }
+            else if(difY < 0 && difX < 0){
+                for(short i = 1; i < -difX; i++){
+                    System.out.println(Main.getBoard()[end.getX() + i][end.getY() + i] + " " + (end.getX() + i) + ", " + (end.getY() + i));
+                    if(!Main.getBoard()[end.getX() + i][end.getY() + i].isPlaceHolder())
+                        return false;
+                }
+            }       
+            return true;
         }
         return false;
     }
