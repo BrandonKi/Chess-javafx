@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -31,6 +32,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         StackPane root = new StackPane();
         pane = new Pane();
+        stage.getIcons().add(new Image("pieces\\resource\\PawnW.png"));
         stage.setTitle("Chess");
         stage.setHeight(HEIGHT);
         stage.setWidth(WIDTH);
@@ -101,7 +103,7 @@ public class Main extends Application {
         }
     }
 
-    public static void drawPieces(Pane p) {
+    private void drawPieces(Pane p) {
         for (short i = 0; i < 8; i++) {
             for (short x = 0; x < 8; x++) {
                 if (!currentBoard[i][x].isPlaceHolder()) {
@@ -119,7 +121,14 @@ public class Main extends Application {
     public static void printBoard() {
         for (short i = 0; i < 8; i++){
             for (short x = 0; x < 8; x++){
-                System.out.print((currentBoard[x][i].isPlaceHolder() ? "Empty " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).equals("Pawn") ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 6 ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 5 ? currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + " " : currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  ") + " ");
+                System.out.print((currentBoard[x][i].isPlaceHolder() ? "Empty " : 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).equals("Pawn") ? 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  " : 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 6 ? 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) : 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1).length() == 5 ? 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + " " : 
+                currentBoard[x][i].toString().substring(currentBoard[x][i].toString().indexOf(' ')+1) + "  ") + " ");
             }
             System.out.println();
         }
