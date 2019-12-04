@@ -20,9 +20,17 @@ public class Main extends Application {
     public final static boolean WHITE = false;
     public final static boolean BLACK = true;
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
-    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
-    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
+
+    //Laptop
+    //public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
+    //private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
+    //private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
+
+    //Desktop
+    public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
+    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
+    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
+
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;
     public static Pane pane;
@@ -30,6 +38,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+
         StackPane root = new StackPane();
         pane = new Pane();
         stage.getIcons().add(new Image("pieces\\resource\\PawnW.png"));
@@ -42,6 +51,7 @@ public class Main extends Application {
         initBoard(gcBack);
         root.getChildren().add(backCanvas);
         drawPieces(pane);
+        Piece.initLists();
         root.getChildren().add(pane);
 
         stage.setScene(new Scene(root, WIDTH, HEIGHT));

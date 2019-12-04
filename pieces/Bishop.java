@@ -31,7 +31,7 @@ public class Bishop extends Piece{
             }
             else if(difY > 0 && difX < 0){
                 for(short i = 1; i < difY; i++){
-                    System.out.println(Main.getBoard()[end.getX() + i][end.getY() + i] + " " + (end.getX() + i) + ", " + (end.getY() + i));
+                    System.out.println(Main.getBoard()[end.getX() + i][end.getY() - i] + " " + (end.getX() + i) + ", " + (end.getY() - i));
                     if(!Main.getBoard()[end.getX() + i][end.getY() - i].isPlaceHolder())
                         return false;
                 }

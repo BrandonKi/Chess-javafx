@@ -18,6 +18,8 @@ public abstract class Piece extends StackPane{
     public static final short IMG_Y_OFFSET = 10;
     private Point pos;
     public Point start, end;
+    private boolean hasMoved = false;
+    private boolean castle = false, check = false;
 
     public Piece(int x, int y, boolean color){
         pos = new Point(x, y);
@@ -60,37 +62,94 @@ public abstract class Piece extends StackPane{
         convertToBoardCoords(end);
         System.out.println(start.getX() + " " + start.getY());
         System.out.println(end.getX() + " " + end.getY());
-        if(isValid(start, end)){ 
-            Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
-            Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
-            Main.getBoard()[end.getX()][end.getY()] = this;
-            this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
-            Main.turn = !Main.turn;
-        }
-        else
+        if(inCheck()){
+            check = false;
+            System.out.println("check");
+
+        } 
+        else if(isValid(start, end)){
+        	if(isCastle()){
+                castle = false;
+                System.out.println("castle");
+                Main.getBoard()[start.getX()][start.getY()] = Main.getBoard()[end.getX()][end.getY()];
+                Main.getBoard()[end.getX()][end.getY()].relocate(IMG_X_OFFSET + (start.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (start.getY() * Main.TILE_SIZE));
+                Main.getBoard()[end.getX()][end.getY()] = this;
+                this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+                hasMoved = true;
+                Main.turn = !Main.turn;
+            }else{
+                Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
+                Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
+                Main.getBoard()[end.getX()][end.getY()] = this;
+                this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+                hasMoved = true;
+                Main.turn = !Main.turn;
+            }
+        }else
             this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
-        Main.printBoard();
+        //Main.printBoard();
+        System.out.println("\n\n");
     }
 
-    public void convertToBoardCoords(Point p){
+    private void convertToBoardCoords(Point p){
         p.setX(p.getX()/Main.TILE_SIZE);
         p.setY(p.getY()/Main.TILE_SIZE);
     }
 
-    public Point toLocation(Point p){
-        return new Point(p.getY(), p.getX()); //flip X and Y
-    }
-
     protected boolean isValid(Point start, Point end){
-        System.out.println(Main.getBoard()[end.getX()][end.getY()]);
+        //System.out.println(Main.getBoard()[end.getX()][end.getY()]);
         if((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
             return true;
         }
         return false;
     }
 
+    protected boolean inCheck(){
+        System.out.println(!getColor() ? "black" : "white");
+        System.out.println(Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()]);
+        for(Piece p: !this.getColor() ? listW : listB){
+            System.out.println(p + " " + Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()] + " " + p.getGridPosition() + " " + getKingPos(!this.color));
+            if(p.isValid(p.getGridPosition(), getKingPos(!this.color))){
+                System.out.println(p + " " + Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()] + " " + p.getGridPosition() + " " + getKingPos(!this.color));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected void setCastle(){
+        castle = true;
+    }
+
+    protected boolean isCastle(){
+        return castle;
+    }
+
     public boolean isPlaceHolder(){
-        return getClass().getName().substring(getClass().getName().indexOf('.')+1).indexOf("Holder") != -1;
+        return getClass().getName().substring(getClass().getName().indexOf('.')+1).indexOf("Place") != -1;
+    }
+
+    public boolean hasMoved(){
+        return hasMoved;
+    }
+
+    private Point getKingPos(boolean color){
+        ArrayList<Piece> listB = new ArrayList<Piece>();
+        ArrayList<Piece> listW = new ArrayList<Piece>();
+        for(int i = 0; i < 8; i++){
+            for(int x = 0; x < 8; x++){
+                if(Main.getBoard()[i][x].getColor() == Main.WHITE && !Main.getBoard()[i][x].isPlaceHolder())
+                    listW.add(Main.getBoard()[i][x]);
+                else if (Main.getBoard()[i][x].getColor() == Main.BLACK)
+                    listB.add(Main.getBoard()[i][x]);
+            }
+        }
+        for(Piece p: color ? listB : listW)
+            if(p.getClass().getName().indexOf("King") != -1){
+                System.out.println(p.getGridPosition());
+                return p.getGridPosition();
+            }
+        return null;
     }
 
     private void makeDraggable(Piece p) {
