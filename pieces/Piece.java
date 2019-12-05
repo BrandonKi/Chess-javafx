@@ -19,7 +19,7 @@ public abstract class Piece extends StackPane{
     private Point pos;
     public Point start, end;
     private boolean hasMoved = false;
-    private boolean castle = false, check = false;
+    private boolean castle = false, pawnPromotion = false;
 
     public Piece(int x, int y, boolean color){
         pos = new Point(x, y);
@@ -62,12 +62,7 @@ public abstract class Piece extends StackPane{
         convertToBoardCoords(end);
         System.out.println(start.getX() + " " + start.getY());
         System.out.println(end.getX() + " " + end.getY());
-        if(inCheck()){
-            check = false;
-            System.out.println("check");
-
-        } 
-        else if(isValid(start, end)){
+        if(isValid(start, end)){
         	if(isCastle()){
                 castle = false;
                 System.out.println("castle");
@@ -77,7 +72,17 @@ public abstract class Piece extends StackPane{
                 this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 hasMoved = true;
                 Main.turn = !Main.turn;
-            }else{
+            }else if (isPawnPromotion(end)){
+                Main.showSelectionFrame(this.color);
+                Main.getBoard()[end.getX()][end.getY()].setVisible(false);
+                this.setVisible(false);
+                Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
+                Piece temp = Main.getPawnProSelection(end.getX(), end.getY(), color);
+                Main.getBoard()[end.getX()][end.getY()] = temp;                                                             // change this  
+                temp.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE)); // and this
+                Main.turn = !Main.turn;
+            }
+            else{
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
                 Main.getBoard()[end.getX()][end.getY()] = this;
@@ -104,19 +109,6 @@ public abstract class Piece extends StackPane{
         return false;
     }
 
-    protected boolean inCheck(){
-        System.out.println(!getColor() ? "black" : "white");
-        System.out.println(Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()]);
-        for(Piece p: !this.getColor() ? listW : listB){
-            System.out.println(p + " " + Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()] + " " + p.getGridPosition() + " " + getKingPos(!this.color));
-            if(p.isValid(p.getGridPosition(), getKingPos(!this.color))){
-                System.out.println(p + " " + Main.getBoard()[getKingPos(!this.color).getX()][getKingPos(!this.color).getY()] + " " + p.getGridPosition() + " " + getKingPos(!this.color));
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected void setCastle(){
         castle = true;
     }
@@ -125,31 +117,18 @@ public abstract class Piece extends StackPane{
         return castle;
     }
 
+    protected boolean isPawnPromotion(Point end){
+        if(this.getClass().getName().indexOf("Pawn") != -1 && (end.getY() == 0 || end.getY() == 7))
+            return true;
+        return false;
+    }
+
     public boolean isPlaceHolder(){
         return getClass().getName().substring(getClass().getName().indexOf('.')+1).indexOf("Place") != -1;
     }
 
     public boolean hasMoved(){
         return hasMoved;
-    }
-
-    private Point getKingPos(boolean color){
-        ArrayList<Piece> listB = new ArrayList<Piece>();
-        ArrayList<Piece> listW = new ArrayList<Piece>();
-        for(int i = 0; i < 8; i++){
-            for(int x = 0; x < 8; x++){
-                if(Main.getBoard()[i][x].getColor() == Main.WHITE && !Main.getBoard()[i][x].isPlaceHolder())
-                    listW.add(Main.getBoard()[i][x]);
-                else if (Main.getBoard()[i][x].getColor() == Main.BLACK)
-                    listB.add(Main.getBoard()[i][x]);
-            }
-        }
-        for(Piece p: color ? listB : listW)
-            if(p.getClass().getName().indexOf("King") != -1){
-                System.out.println(p.getGridPosition());
-                return p.getGridPosition();
-            }
-        return null;
     }
 
     private void makeDraggable(Piece p) {
