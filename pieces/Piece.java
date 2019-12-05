@@ -19,7 +19,8 @@ public abstract class Piece extends StackPane{
     private Point pos;
     public Point start, end;
     private boolean hasMoved = false;
-    private boolean castle = false, pawnPromotion = false;
+    private boolean castle = false;
+    public static Point pawnProPos;
 
     public Piece(int x, int y, boolean color){
         pos = new Point(x, y);
@@ -73,14 +74,11 @@ public abstract class Piece extends StackPane{
                 hasMoved = true;
                 Main.turn = !Main.turn;
             }else if (isPawnPromotion(end)){
-                Main.showSelectionFrame(this.color);
-                Main.getBoard()[end.getX()][end.getY()].setVisible(false);
                 this.setVisible(false);
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
-                Piece temp = Main.getPawnProSelection(end.getX(), end.getY(), color);
-                Main.getBoard()[end.getX()][end.getY()] = temp;                                                             // change this  
-                temp.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE)); // and this
-                Main.turn = !Main.turn;
+                pawnProPos = end;
+                Main.showSelectionFrame(this.color);
+                //The rest is carried out by the promote method which is called after a selection is made
             }
             else{
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
@@ -129,6 +127,17 @@ public abstract class Piece extends StackPane{
 
     public boolean hasMoved(){
         return hasMoved;
+    }
+
+    public static void promote(String sel){
+        Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()].setVisible(false);
+        Piece temp = Main.createPiece(pawnProPos.getX(), pawnProPos.getY(), sel.charAt(sel.length()-1) == 'B' ? true : false, sel.substring(0,sel.length()-1));
+        System.out.println(temp.getLayoutX() + " " + temp.getLayoutY());
+        Main.pane.getChildren().add(temp);
+        Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()] = temp;     
+        temp.relocate(IMG_X_OFFSET + pawnProPos.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + pawnProPos.getY() * Main.TILE_SIZE); // and this
+        temp.setVisible(true);
+        Main.turn = !Main.turn;
     }
 
     private void makeDraggable(Piece p) {

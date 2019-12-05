@@ -12,4 +12,4 @@ Future features:
 
 * en passant
 
-* Pawn Promotion 
+* Pawn Promotion (Done)

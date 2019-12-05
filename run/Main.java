@@ -42,7 +42,6 @@ public class Main extends Application {
     public static Pane pane;
     public static Pane selFrameW, selFrameB;
     public static boolean turn = WHITE;
-    private static String pawnPro;
 
     @Override
     public void start(Stage stage) {
@@ -68,7 +67,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    private static Piece createPiece(int x, int y, boolean color, String piece) {
+    public static Piece createPiece(int x, int y, boolean color, String piece) {
         Piece temp = null;
         ;
         switch (piece) {
@@ -151,6 +150,7 @@ public class Main extends Application {
             for (short x = 0; x < 8; x++) {
                 if (!currentBoard[i][x].isPlaceHolder()) {
                     currentBoard[i][x].relocate(Piece.IMG_X_OFFSET + i * TILE_SIZE, Piece.IMG_Y_OFFSET + x * TILE_SIZE);
+                    currentBoard[i][x].setVisible(true);
                     p.getChildren().add(currentBoard[i][x]);
                 }
             }
@@ -201,8 +201,9 @@ public class Main extends Application {
         EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                pawnPro = event.getSource().toString().substring(event.getSource().toString().indexOf("'") + 1,
-                        event.getSource().toString().length() - 1);
+                String pawnPro = event.getSource().toString().substring(event.getSource().toString().indexOf("'") + 1,
+                        event.getSource().toString().length() - 1) + "W";
+                        Piece.promote(pawnPro);
                 p.setVisible(false);
                 event.consume();
             }
@@ -256,8 +257,9 @@ public class Main extends Application {
         EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                pawnPro = event.getSource().toString().substring(event.getSource().toString().indexOf("'") + 1,
-                        event.getSource().toString().length() - 1);
+                String pawnPro = event.getSource().toString().substring(event.getSource().toString().indexOf("'") + 1,
+                        event.getSource().toString().length() - 1)  + "B";
+                        Piece.promote(pawnPro);
                 p.setVisible(false);
                 event.consume();
             }
@@ -306,11 +308,5 @@ public class Main extends Application {
             selFrameB.setVisible(true);
         else
             selFrameW.setVisible(true);
-    }
-
-    public static Piece getPawnProSelection(int x, int y, boolean color) {
-        while(pawnPro == null)
-            ;
-        return createPiece(x, y, color, pawnPro);
     }
 }
