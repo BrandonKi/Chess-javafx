@@ -19,7 +19,7 @@ public abstract class Piece extends StackPane{
     private Point pos;
     public Point start, end;
     private boolean hasMoved = false;
-    private boolean castle = false;
+    protected boolean castle = false, passant = false;
     public static Point pawnProPos;
 
     public Piece(int x, int y, boolean color){
