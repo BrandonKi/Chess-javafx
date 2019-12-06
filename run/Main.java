@@ -28,14 +28,14 @@ public class Main extends Application {
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Laptop
-    //public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
-    //private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
-    //private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
+    public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
+    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
+    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
 
     //Desktop
-    public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
-    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
-    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
+    // public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
+    // private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
+    // private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
 
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;

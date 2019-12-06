@@ -20,7 +20,9 @@ public abstract class Piece extends StackPane{
     public Point start, end;
     private boolean hasMoved = false;
     protected boolean castle = false, passant = false;
+    protected static boolean passantHelperW = false, passantHelperB = false;
     public static Point pawnProPos;
+    private static ImageView unknown;
 
     public Piece(int x, int y, boolean color){
         pos = new Point(x, y);
@@ -76,9 +78,14 @@ public abstract class Piece extends StackPane{
             }else if (isPawnPromotion(end)){
                 this.setVisible(false);
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
+                Main.getBoard()[end.getX()][end.getY()].setVisible(false);
+                unknown = new ImageView(new Image("pieces\\resource\\Unknown.png"));
+                Main.pane.getChildren().add(unknown);
+                unknown.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 pawnProPos = end;
                 Main.showSelectionFrame(this.color);
-                //The rest is carried out by the promote method which is called after a selection is made
+                // goto promote method
+                //The rest is carried out by the "promote" method which is called after a selection is made
             }
             else{
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
@@ -90,7 +97,10 @@ public abstract class Piece extends StackPane{
             }
         }else
             this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
-        //Main.printBoard();
+        if(Main.turn && passantHelperB)
+            passantHelperB = false;
+        if(Main.turn && passantHelperW)
+            passantHelperW = false;
         System.out.println("\n\n");
     }
 
@@ -130,6 +140,7 @@ public abstract class Piece extends StackPane{
     }
 
     public static void promote(String sel){
+        unknown.setVisible(false);
         Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()].setVisible(false);
         Piece temp = Main.createPiece(pawnProPos.getX(), pawnProPos.getY(), sel.charAt(sel.length()-1) == 'B' ? true : false, sel.substring(0,sel.length()-1));
         System.out.println(temp.getLayoutX() + " " + temp.getLayoutY());
