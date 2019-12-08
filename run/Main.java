@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
@@ -16,7 +15,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pieces.*;
-import point.Point;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -28,14 +26,18 @@ public class Main extends Application {
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Laptop
-    public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
-    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
-    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
+    // public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
+    // private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/19);
+    // private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/99);
+    // public static final short IMG_X_OFFSET = 10;
+    // public static final short IMG_Y_OFFSET = 10;
 
     //Desktop
-    // public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
-    // private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
-    // private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
+    public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
+    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
+    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
+    public static final short IMG_X_OFFSET = 15;
+    public static final short IMG_Y_OFFSET = 15;
 
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;
@@ -149,7 +151,7 @@ public class Main extends Application {
         for (short i = 0; i < 8; i++) {
             for (short x = 0; x < 8; x++) {
                 if (!currentBoard[i][x].isPlaceHolder()) {
-                    currentBoard[i][x].relocate(Piece.IMG_X_OFFSET + i * TILE_SIZE, Piece.IMG_Y_OFFSET + x * TILE_SIZE);
+                    currentBoard[i][x].relocate(Main.IMG_X_OFFSET + i * TILE_SIZE, Main.IMG_Y_OFFSET + x * TILE_SIZE);
                     currentBoard[i][x].setVisible(true);
                     p.getChildren().add(currentBoard[i][x]);
                 }

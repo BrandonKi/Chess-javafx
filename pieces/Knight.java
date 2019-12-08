@@ -1,9 +1,6 @@
 package pieces;
 
-import java.util.ArrayList;
-
 import point.Point;
-import run.Main;
 
 public class Knight extends Piece{
 

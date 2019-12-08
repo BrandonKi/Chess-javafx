@@ -10,6 +10,6 @@ Future features:
 
 * StaleMate
 
-* en passant
+* en passant (Done)
 
 * Pawn Promotion (Done)

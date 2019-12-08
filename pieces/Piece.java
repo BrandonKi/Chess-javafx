@@ -1,7 +1,5 @@
 package pieces;
 
-import java.util.ArrayList;
-
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -14,8 +12,7 @@ public abstract class Piece extends StackPane{
 
     private boolean color; // true = black, false = white
     private static final short MOUSE_IMG_DRAG_OFFSET = 30;
-    public static final short IMG_X_OFFSET = 10;
-    public static final short IMG_Y_OFFSET = 10;
+    
     private Point pos;
     public Point start, end;
     private boolean hasMoved = false;
@@ -70,9 +67,9 @@ public abstract class Piece extends StackPane{
                 castle = false;
                 System.out.println("castle");
                 Main.getBoard()[start.getX()][start.getY()] = Main.getBoard()[end.getX()][end.getY()];
-                Main.getBoard()[end.getX()][end.getY()].relocate(IMG_X_OFFSET + (start.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (start.getY() * Main.TILE_SIZE));
+                Main.getBoard()[end.getX()][end.getY()].relocate(Main.IMG_X_OFFSET + (start.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (start.getY() * Main.TILE_SIZE));
                 Main.getBoard()[end.getX()][end.getY()] = this;
-                this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+                this.relocate(Main.IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 hasMoved = true;
                 Main.turn = !Main.turn;
             }else if (isPawnPromotion(end)){
@@ -81,7 +78,7 @@ public abstract class Piece extends StackPane{
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);
                 unknown = new ImageView(new Image("pieces\\resource\\Unknown.png"));
                 Main.pane.getChildren().add(unknown);
-                unknown.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+                unknown.relocate(Main.IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 pawnProPos = end;
                 Main.showSelectionFrame(this.color);
                 // goto promote method
@@ -91,12 +88,12 @@ public abstract class Piece extends StackPane{
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
                 Main.getBoard()[end.getX()][end.getY()] = this;
-                this.relocate(IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
+                this.relocate(Main.IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 hasMoved = true;
                 Main.turn = !Main.turn;
             }
         }else
-            this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
+            this.relocate(Main.IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, Main.IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
         if(Main.turn == Main.BLACK && passantHelperB){
             passantHelperB = false;
             setAllPassantFalse(Main.BLACK);
@@ -158,7 +155,7 @@ public abstract class Piece extends StackPane{
         System.out.println(temp.getLayoutX() + " " + temp.getLayoutY());
         Main.pane.getChildren().add(temp);
         Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()] = temp;     
-        temp.relocate(IMG_X_OFFSET + pawnProPos.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + pawnProPos.getY() * Main.TILE_SIZE); // and this
+        temp.relocate(Main.IMG_X_OFFSET + pawnProPos.getX() * Main.TILE_SIZE, Main.IMG_Y_OFFSET + pawnProPos.getY() * Main.TILE_SIZE); // and this
         temp.setVisible(true);
         Main.turn = !Main.turn;
     }
