@@ -97,13 +97,25 @@ public abstract class Piece extends StackPane{
             }
         }else
             this.relocate(IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
-        if(Main.turn && passantHelperB)
+        if(Main.turn == Main.BLACK && passantHelperB){
             passantHelperB = false;
-        if(Main.turn && passantHelperW)
+            setAllPassantFalse(Main.BLACK);
+        }
+        if(Main.turn == Main.WHITE && passantHelperW){
             passantHelperW = false;
+            setAllPassantFalse(Main.WHITE);
+        }
         System.out.println("\n\n");
     }
 
+    private void setAllPassantFalse(boolean color){
+        for(int i = 0; i < 8; i++){
+            for(int x = 0; x < 8; x++){
+                if (Main.getBoard()[i][x].getColor() == color)
+                    Main.getBoard()[i][x].passant = false;
+            }
+        }
+    }
     private void convertToBoardCoords(Point p){
         p.setX(p.getX()/Main.TILE_SIZE);
         p.setY(p.getY()/Main.TILE_SIZE);
