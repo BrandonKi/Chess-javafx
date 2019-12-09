@@ -16,14 +16,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pieces.*;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+// import java.awt.Dimension;
+// import java.awt.Toolkit;
 
 public class Main extends Application {
 
     public final static boolean WHITE = false;
     public final static boolean BLACK = true;
-    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    //private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Laptop
     // public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
@@ -33,11 +33,19 @@ public class Main extends Application {
     // public static final short IMG_Y_OFFSET = 10;
 
     //Desktop
-    public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
-    private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
-    private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
-    public static final short IMG_X_OFFSET = 15;
-    public static final short IMG_Y_OFFSET = 15;
+    // public static final int TILE_SIZE = (int)(screenSize.getWidth()/20); // 96
+    // private static final int HEIGHT = TILE_SIZE * 8 + (int)(screenSize.getHeight()/30); // 804
+    // private static final int WIDTH = TILE_SIZE * 8 + (int)(screenSize.getWidth()/150); // 780
+    // public static final short IMG_X_OFFSET = 15;
+    // public static final short IMG_Y_OFFSET = 15;
+
+    //Everything Hopefully
+    public static final int TILE_SIZE = 70;
+    private static final short HEIGHT = TILE_SIZE * 8;
+    private static final short WIDTH = TILE_SIZE * 8;
+    public static final byte IMG_X_OFFSET = (TILE_SIZE - 60)/2; // img size is 60 x 60
+    public static final byte IMG_Y_OFFSET = (TILE_SIZE - 60)/2;
+
 
     private static Piece[][] currentBoard;
     private static Piece[][] initialBoard;
@@ -47,15 +55,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-
         StackPane root = new StackPane();
         pane = new Pane();
         stage.getIcons().add(new Image("pieces\\resource\\PawnW.png"));
         stage.setTitle("Chess");
-        stage.setHeight(HEIGHT);
-        stage.setWidth(WIDTH);
+        // stage.setHeight(HEIGHT);
+        // stage.setWidth(WIDTH);
+        stage.sizeToScene();
+        stage.centerOnScreen();
 
-        Canvas backCanvas = new Canvas(stage.getWidth(), stage.getHeight());
+        Canvas backCanvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gcBack = backCanvas.getGraphicsContext2D();
         initBoard(gcBack);
         root.getChildren().add(backCanvas);
@@ -67,6 +76,8 @@ public class Main extends Application {
         root.getChildren().add(selFrameB);
         stage.setScene(new Scene(root, WIDTH, HEIGHT));
         stage.show();
+        System.out.println(stage.getHeight());
+
     }
 
     public static Piece createPiece(int x, int y, boolean color, String piece) {
@@ -142,7 +153,7 @@ public class Main extends Application {
                     gcBack.setFill(Color.GRAY);
                 else
                     gcBack.setFill(Color.WHITE);
-                gcBack.fillRect(5 + (x * TILE_SIZE), 20 + (i * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+                gcBack.fillRect((x * TILE_SIZE), (i * TILE_SIZE), TILE_SIZE, TILE_SIZE);
             }
         }
     }
