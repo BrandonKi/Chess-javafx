@@ -14,28 +14,24 @@ public class Rook extends Piece {
             short difX = (short)(end.getX() - start.getX());
             short difY = (short)(end.getY() - start.getY());
             if(difY > 0 && difX == 0){
-                System.out.println(1);
                 for(short i = 1; i < difY; i++){
                     if(!Main.getBoard()[end.getX()][end.getY() - i].isPlaceHolder())
                         return false;
                 }
             }
             else if(difY < 0 && difX == 0){
-                System.out.println(2);  
                 for(short i = 1; i < -difY; i++){
                     if(!Main.getBoard()[end.getX()][end.getY() + i].isPlaceHolder())
                         return false;
                 }
             }
             else if(difY == 0 && difX > 0){
-                System.out.println(3 + "   " + difY);
                 for(short i = 1; i < -difX; i++){
                     if(!Main.getBoard()[end.getX() - i][end.getY()].isPlaceHolder())
                         return false;
                 }
             }
             else if(difY == 0 && difX < 0){
-                System.out.println(4);
                 for(short i = 1; i < -difX; i++){
                     if(!Main.getBoard()[end.getX() + i][end.getY()].isPlaceHolder())
                         return false;

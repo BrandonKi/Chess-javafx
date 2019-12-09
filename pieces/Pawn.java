@@ -28,8 +28,8 @@ public class Pawn extends Piece {
                 super.passant = true;
                 return true;
             }
-            System.out.println(Main.getBoard()[end.getX()][end.getY()
-                    + (Main.getBoard()[start.getX()][start.getY()].getColor() ? -1 : 1)]);
+            // System.out.println(Main.getBoard()[end.getX()][end.getY()
+            //         + (Main.getBoard()[start.getX()][start.getY()].getColor() ? -1 : 1)]);
             if (Main.getBoard()[end.getX()][end.getY()].isPlaceHolder()
                     && (Main.getBoard()[start.getX()][start.getY()].getColor() ? end.getY() - start.getY() == 1
                             : start.getY() - end.getY() == 1)

@@ -13,8 +13,6 @@ public class King extends Piece{
         
         if(!hasMoved() && Main.getBoard()[end.getX()][end.getY()].getClass().getName().equals("pieces.Rook") && !Main.getBoard()[end.getX()][end.getY()].hasMoved()){
                 for(int i = start.getX() > end.getX() ? end.getX() + 1 : start.getX() + 1; i < (start.getX() > end.getX() ? start.getX() : end.getX()); i++){
-                    System.out.println(i + " " + end.getY());
-                    System.out.println(Main.getBoard()[i][end.getY()]);
                     if(!Main.getBoard()[i][end.getY()].isPlaceHolder())
                         return false;
                 }

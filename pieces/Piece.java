@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.ArrayList;
+
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -58,6 +60,8 @@ public abstract class Piece extends StackPane{
     }
 
     public void move(Point start, Point end){
+        if(inCheck(!this.color))
+            System.out.println(!color + "CHECK!!!");
         convertToBoardCoords(start);
         convertToBoardCoords(end);
         System.out.println(start.getX() + " " + start.getY());
@@ -84,14 +88,15 @@ public abstract class Piece extends StackPane{
                 // goto promote method
                 //The rest is carried out by the "promote" method which is called after a selection is made
             }
-            else{
+            else if(!Main.getBoard()[end.getX()][end.getY()].getClass().getName().equals("pieces.King")){
                 Main.getBoard()[end.getX()][end.getY()].setVisible(false);  
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
                 Main.getBoard()[end.getX()][end.getY()] = this;
                 this.relocate(Main.IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 hasMoved = true;
                 Main.turn = !Main.turn;
-            }
+            }else
+                this.relocate(Main.IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, Main.IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
         }else
             this.relocate(Main.IMG_X_OFFSET + start.getX() * Main.TILE_SIZE, Main.IMG_Y_OFFSET + start.getY() * Main.TILE_SIZE);
         if(Main.turn == Main.BLACK && passantHelperB){
@@ -105,9 +110,37 @@ public abstract class Piece extends StackPane{
         System.out.println("\n\n");
     }
 
+
+    private boolean inCheck(boolean color){
+        ArrayList<Piece> list = new ArrayList<Piece>();
+        Point king = getKingPos(!color);
+        for(byte i = 0; i < 8; i++){
+            for(byte x = 0; x < 8; x++){
+                if(Main.getBoard()[i][x].getColor() == color)
+                    list.add(Main.getBoard()[i][x]);
+            }
+        }
+        for(Piece p: list)
+            if(p.isValid(p.getGridPosition(), king)){
+                System.out.println(p + " " + Main.getBoard()[king.getX()][king.getY()] + " " + p.getGridPosition() + " " + king);
+                return true;
+            }
+        return false;
+    }
+
+    private Point getKingPos(boolean color){
+        for(byte i = 0; i < 8; i++){
+            for(byte x = 0; x < 8; x++){
+                if(Main.getBoard()[i][x].getClass().getName().equals("pieces.King") && Main.getBoard()[i][x].getColor() == color)
+                    return new Point(i, x);
+            }
+        }
+        return null;
+    }
+
     private void setAllPassantFalse(boolean color){
-        for(int i = 0; i < 8; i++){
-            for(int x = 0; x < 8; x++){
+        for(byte i = 0; i < 8; i++){
+            for(byte x = 0; x < 8; x++){
                 if (Main.getBoard()[i][x].getColor() == color)
                     Main.getBoard()[i][x].passant = false;
             }
@@ -120,6 +153,8 @@ public abstract class Piece extends StackPane{
 
     protected boolean isValid(Point start, Point end){
         //System.out.println(Main.getBoard()[end.getX()][end.getY()]);
+        if(this.isPlaceHolder())
+            return false;
         if((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
             return true;
         }
@@ -144,7 +179,7 @@ public abstract class Piece extends StackPane{
         return getClass().getName().substring(getClass().getName().indexOf('.')+1).indexOf("Place") != -1;
     }
 
-    public boolean hasMoved(){
+    protected boolean hasMoved(){
         return hasMoved;
     }
 
@@ -152,7 +187,6 @@ public abstract class Piece extends StackPane{
         unknown.setVisible(false);
         Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()].setVisible(false);
         Piece temp = Main.createPiece(pawnProPos.getX(), pawnProPos.getY(), sel.charAt(sel.length()-1) == 'B' ? true : false, sel.substring(0,sel.length()-1));
-        System.out.println(temp.getLayoutX() + " " + temp.getLayoutY());
         Main.pane.getChildren().add(temp);
         Main.getBoard()[pawnProPos.getX()][pawnProPos.getY()] = temp;     
         temp.relocate(Main.IMG_X_OFFSET + pawnProPos.getX() * Main.TILE_SIZE, Main.IMG_Y_OFFSET + pawnProPos.getY() * Main.TILE_SIZE); // and this
