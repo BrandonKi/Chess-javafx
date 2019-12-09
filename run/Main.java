@@ -23,7 +23,7 @@ public class Main extends Application {
 
     public final static boolean WHITE = false;
     public final static boolean BLACK = true;
-    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Laptop
     // public static final int TILE_SIZE = (int)(screenSize.getWidth()/16);
