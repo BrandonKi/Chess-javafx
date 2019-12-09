@@ -60,8 +60,8 @@ public abstract class Piece extends StackPane{
     }
 
     public void move(Point start, Point end){
-        if(inCheck(!this.color))
-            System.out.println(!color + "CHECK!!!");
+        // if(inCheck(!this.color))
+        //     System.out.println(!color + "CHECK!!!");
         convertToBoardCoords(start);
         convertToBoardCoords(end);
         System.out.println(start.getX() + " " + start.getY());
