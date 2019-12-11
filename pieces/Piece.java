@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import point.Point;
 import run.Main;
+import aicontroller.AIController;
 
 public abstract class Piece extends StackPane{
 
@@ -19,11 +20,15 @@ public abstract class Piece extends StackPane{
     public Point start, end;
     private boolean hasMoved = false;
     protected boolean castle = false, passant = false;
+    public boolean AIControlled = false;                                 // AI is default false
     protected static boolean passantHelperW = false, passantHelperB = false;
     public static Point pawnProPos;
     private static ImageView unknown;
+    private AIController AI;
 
     public Piece(int x, int y, boolean color){
+        if(AIControlled)
+            AI = new AIController();
         pos = new Point(x, y);
 
         this.color = color;
@@ -60,8 +65,10 @@ public abstract class Piece extends StackPane{
     }
 
     public void move(Point start, Point end){
-        // if(inCheck(!this.color))
-        //     System.out.println(!color + "CHECK!!!");
+
+        if(inCheck(this.color))
+            System.out.println(color + "CHECK!!!");
+
         convertToBoardCoords(start);
         convertToBoardCoords(end);
         System.out.println(start.getX() + " " + start.getY());
@@ -108,23 +115,29 @@ public abstract class Piece extends StackPane{
             setAllPassantFalse(Main.WHITE);
         }
         System.out.println("\n\n");
+
+        if(AIControlled && Main.turn == Main.BLACK){
+            AI.start();
+        }
     }
 
 
     private boolean inCheck(boolean color){
         ArrayList<Piece> list = new ArrayList<Piece>();
-        Point king = getKingPos(!color);
+        Point king = getKingPos(color);
         for(byte i = 0; i < 8; i++){
             for(byte x = 0; x < 8; x++){
-                if(Main.getBoard()[i][x].getColor() == color)
+                if(Main.getBoard()[i][x].getColor() == !color && !Main.getBoard()[i][x].isPlaceHolder())
                     list.add(Main.getBoard()[i][x]);
             }
         }
-        for(Piece p: list)
+        for(Piece p: list){
             if(p.isValid(p.getGridPosition(), king)){
                 System.out.println(p + " " + Main.getBoard()[king.getX()][king.getY()] + " " + p.getGridPosition() + " " + king);
                 return true;
             }
+            System.out.println(p + " " + p.getGridPosition() + " " + king + " " + p.isValid(p.getGridPosition(), king));
+        }
         return false;
     }
 
