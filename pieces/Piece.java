@@ -166,6 +166,7 @@ public abstract class Piece extends StackPane{
 
     protected boolean isValid(Point start, Point end){
         //System.out.println(Main.getBoard()[end.getX()][end.getY()]);
+        if(Main.getBoard()[end.getX()][end.getY()] )
         if(this.isPlaceHolder())
             return false;
         if((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
