@@ -2,7 +2,7 @@
 
 Future features:
 
-* Castling (done but implementation contains one bug)
+* Castling (one known bug)
 
 * Check
 
