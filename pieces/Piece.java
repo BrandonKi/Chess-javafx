@@ -75,14 +75,24 @@ public abstract class Piece extends StackPane{
         System.out.println(end.getX() + " " + end.getY());
         if(isValid(start, end)){
         	if(isCastle()){
+                int direction = 2;              // negative direction means move left 
+                if(end.getX() < start.getX())
+                    direction = -direction;
                 castle = false;
-                System.out.println("castle");
-                Main.getBoard()[start.getX()][start.getY()] = Main.getBoard()[end.getX()][end.getY()];
-                Main.getBoard()[end.getX()][end.getY()].relocate(Main.IMG_X_OFFSET + (start.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (start.getY() * Main.TILE_SIZE));
+                System.out.println("castle " + (direction > 0 ? "short" : "long"));
+                System.out.println(end.getX() + (direction > 0 ? direction / 2 : direction));
+                /* Move rook */
+                Main.getBoard()[start.getX() + direction / 2][start.getY()] = Main.getBoard()[end.getX() + (direction > 0 ? direction / 2 : direction)][end.getY()]; 
+                Main.getBoard()[end.getX() + (direction > 0 ? direction / 2 : direction)][end.getY()].relocate(Main.IMG_X_OFFSET + ((start.getX() + direction / 2) * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (start.getY() * Main.TILE_SIZE));
+                Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
+                Main.getBoard()[end.getX() + direction / 2][end.getY()] = new PlaceHolder(end.getX() + direction / 2, end.getY());
+                /* Move king */
                 Main.getBoard()[end.getX()][end.getY()] = this;
+                Main.getBoard()[end.getX() + (direction > 0 ? direction / 2 : direction)][end.getY()] = new PlaceHolder(end.getX() + direction / 2, end.getY());
                 this.relocate(Main.IMG_X_OFFSET + (end.getX() * Main.TILE_SIZE), Main.IMG_Y_OFFSET + (end.getY() * Main.TILE_SIZE));
                 hasMoved = true;
                 Main.turn = !Main.turn;
+                Main.printBoard();
             }else if (isPawnPromotion(end)){
                 this.setVisible(false);
                 Main.getBoard()[start.getX()][start.getY()] = new PlaceHolder(start.getX(), start.getY());
@@ -123,21 +133,21 @@ public abstract class Piece extends StackPane{
 
 
     private boolean inCheck(boolean color){
-        ArrayList<Piece> list = new ArrayList<Piece>();
-        Point king = getKingPos(color);
-        for(byte i = 0; i < 8; i++){
-            for(byte x = 0; x < 8; x++){
-                if(Main.getBoard()[i][x].getColor() == !color && !Main.getBoard()[i][x].isPlaceHolder())
-                    list.add(Main.getBoard()[i][x]);
-            }
-        }
-        for(Piece p: list){
-            if(p.isValid(p.getGridPosition(), king)){
-                System.out.println(p + " " + Main.getBoard()[king.getX()][king.getY()] + " " + p.getGridPosition() + " " + king);
-                return true;
-            }
-            System.out.println(p + " " + p.getGridPosition() + " " + king + " " + p.isValid(p.getGridPosition(), king));
-        }
+        // ArrayList<Piece> list = new ArrayList<Piece>();
+        // Point king = getKingPos(color);
+        // for(byte i = 0; i < 8; i++){
+        //     for(byte x = 0; x < 8; x++){
+        //         if(Main.getBoard()[i][x].getColor() == !color && !Main.getBoard()[i][x].isPlaceHolder())
+        //             list.add(Main.getBoard()[i][x]);
+        //     }
+        // }
+        // for(Piece p: list){
+        //     if(p.isValid(p.getGridPosition(), king)){
+        //         System.out.println(p + " " + Main.getBoard()[king.getX()][king.getY()] + " " + p.getGridPosition() + " " + king);
+        //         return true;
+        //     }
+        //     System.out.println(p + " " + p.getGridPosition() + " " + king + " " + p.isValid(p.getGridPosition(), king));
+        // }
         return false;
     }
 
@@ -169,7 +179,7 @@ public abstract class Piece extends StackPane{
         //if(Main.getBoard()[end.getX()][end.getY()] )
         if(this.isPlaceHolder())
             return false;
-        if((Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
+        if(end.getX() >= 0 && end.getY() >= 0 && end.getX() < Main.getBoard().length && end.getY() < Main.getBoard().length && (Main.getBoard()[end.getX()][end.getY()].isPlaceHolder() || Main.getBoard()[end.getX()][end.getY()].getColor() != Main.getBoard()[start.getX()][start.getY()].getColor())){
             return true;
         }
         return false;

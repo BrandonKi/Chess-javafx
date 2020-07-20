@@ -82,7 +82,7 @@ public class Main extends Application {
 
     public static Piece createPiece(int x, int y, boolean color, String piece) {
         Piece temp = null;
-        ;
+        
         switch (piece) {
         case "Pawn":
             temp = new Pawn(x, y, color);

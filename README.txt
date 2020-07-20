@@ -2,7 +2,7 @@
 
 Future features:
 
-* Castling (one known bug)
+* Castling (Done)
 
 * Check
 
