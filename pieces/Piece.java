@@ -33,7 +33,7 @@ public abstract class Piece extends StackPane{
 
         this.color = color;
         if(!isPlaceHolder()){
-            getChildren().add(new ImageView(new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png")));
+            getChildren().add(new ImageView(new Image("pieces\\resource\\" + getClass().getName().substring(getClass().getName().indexOf(".")+1) + (color ? "B" : "W") + ".png", Main.IMG_WIDTH, Main.IMG_HEIGHT, true, true)));
             makeDraggable(this);
         }
     }
@@ -233,6 +233,9 @@ public abstract class Piece extends StackPane{
             if(color == Main.turn){
                 node.getScene().setCursor(Cursor.CLOSED_HAND);
                 start = new Point((int)e.getSceneX(), (int)e.getSceneY());
+                node.toFront();
+                node.setLayoutX(node.getLayoutX() + e.getX() - MOUSE_IMG_DRAG_OFFSET);
+                node.setLayoutY(node.getLayoutY() + e.getY() - MOUSE_IMG_DRAG_OFFSET);
             }
         });
 
@@ -246,6 +249,7 @@ public abstract class Piece extends StackPane{
 
         node.setOnMouseDragged(e -> {
             if(color == Main.turn){
+                node.toFront();
                 node.setLayoutX(node.getLayoutX() + e.getX() - MOUSE_IMG_DRAG_OFFSET);
                 node.setLayoutY(node.getLayoutY() + e.getY() - MOUSE_IMG_DRAG_OFFSET);
             }

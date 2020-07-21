@@ -40,11 +40,14 @@ public class Main extends Application {
     // public static final short IMG_Y_OFFSET = 15;
 
     //Everything Hopefully
-    public static final int TILE_SIZE = 70;
+    public static final byte TILE_SIZE = 70;
+    public static final byte IMG_WIDTH = (byte)Math.round(TILE_SIZE * 0.85714285714);
+    public static final byte IMG_HEIGHT = IMG_WIDTH;
     private static final short HEIGHT = TILE_SIZE * 8;
     private static final short WIDTH = TILE_SIZE * 8;
-    public static final byte IMG_X_OFFSET = (TILE_SIZE - 60)/2; // img size is 60 x 60
-    public static final byte IMG_Y_OFFSET = (TILE_SIZE - 60)/2;
+    public static final byte IMG_X_OFFSET = (byte)((TILE_SIZE - IMG_WIDTH)/2); // img size is 60 x 60
+    public static final byte IMG_Y_OFFSET = (byte)((TILE_SIZE - IMG_HEIGHT)/2);
+
 
 
     private static Piece[][] currentBoard;
@@ -63,6 +66,7 @@ public class Main extends Application {
         // stage.setWidth(WIDTH);
         stage.sizeToScene();
         stage.centerOnScreen();
+        stage.setResizable(false);
 
         Canvas backCanvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gcBack = backCanvas.getGraphicsContext2D();
